@@ -1,23 +1,39 @@
 <template>
-  <div>{{users}}
+  <div>
     <table>
+      <tbody>
       <tr>
         <th v-for="header in tableHeaders">{{header}}</th>
       </tr>
-      <tr v-for=""></tr>
+      <tr v-for="user in users" v-bind:key="user.id">
+        <td>{{user.id}}</td>
+        <td>{{user.name}}</td>
+        <td>{{user['e-mail']}}</td>
+        <td>{{user.login}}</td>
+        <td>{{user.created}}</td>
+        <td>
+          <button @click="deleteUser(user.id)">&times;</button>
+        </td>
+      </tr>
+      </tbody>
     </table>
   </div>
 </template>
 
 <script>
-  import usersData from '@/data.js'
 
   export default {
     name: 'UsersTable',
+    props: ['users'],
     data () {
       return {
-        users: usersData,
         tableHeaders: ['id', 'Имя', 'Логин', 'E-mail', 'Дата регистрации']
+      }
+    },
+    methods: {
+      deleteUser(id) {
+        console.log(id)
+        this.$emit('delete', id)
       }
     }
   }

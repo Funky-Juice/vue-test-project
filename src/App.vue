@@ -1,17 +1,32 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <users-table></users-table>
+    <users-table @delete="deleteUserFromData" :users="users"></users-table>
   </div>
 </template>
 
 <script>
   import UsersTable from './components/UsersTable'
+  import usersData from '@/data.js'
+  //  import hello from './components/Hello.vue'
+
   export default {
+    name: 'app',
+    data() {
+      return {
+        users: usersData.users
+      }
+    },
     components: {
       UsersTable
     },
-    name: 'app'
+    methods: {
+      deleteUserFromData(id) {
+        console.log(id)
+        this.users = this.users.filter(function (user) {
+          return user.id !== id
+        })
+      }
+    }
   }
 </script>
 
