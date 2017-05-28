@@ -1,19 +1,19 @@
 <template>
   <div>
-    <table>
+    <user-form @addRow="addNewRow"></user-form>
+
+    <table class="users-table">
       <tbody>
       <tr>
         <th v-for="header in tableHeaders">{{header}}</th>
       </tr>
-      <tr v-for="user in users" v-bind:key="user.id">
+      <tr v-for="user in users" :key="user.id">
         <td>{{user.id}}</td>
         <td>{{user.name}}</td>
-        <td>{{user['e-mail']}}</td>
         <td>{{user.login}}</td>
+        <td>{{user['e-mail']}}</td>
         <td>{{user.created}}</td>
-        <td>
-          <button @click="deleteUser(user.id)">&times;</button>
-        </td>
+        <button @click="somenewevt; deleteUser(user.id)" class="delete-btn">Удалить</button>
       </tr>
       </tbody>
     </table>
@@ -21,42 +21,52 @@
 </template>
 
 <script>
+  import UserForm from './UserForm'
 
   export default {
     name: 'UsersTable',
     props: ['users'],
-    data () {
+    data() {
       return {
         tableHeaders: ['id', 'Имя', 'Логин', 'E-mail', 'Дата регистрации']
       }
     },
+    components: {
+      UserForm
+    },
     methods: {
       deleteUser(id) {
-        console.log(id)
         this.$emit('delete', id)
+      },
+      somenewevt() {
+        this.$emit('someNewEvt', 'someNewEvt')
+      },
+      addNewRow(msg) {
+        console.log(msg)
       }
     }
   }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-  h1, h2 {
-    font-weight: normal;
+<style>
+  .users-table {
+    position: relative;
+    min-width: 700px;
+    margin: 50px auto;
+    border-collapse: collapse;
   }
 
-  ul {
-    list-style-type: none;
-    padding: 0;
+  .users-table th,
+  .users-table td {
+    padding: 10px;
+    border: 1px solid grey;
+    text-align: center;
   }
 
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-
-  a {
-    color: #42b983;
+  .delete-btn {
+    position: absolute;
+    right: -80px;
+    margin-top: 4px;
+    padding: 5px;
   }
 </style>
-

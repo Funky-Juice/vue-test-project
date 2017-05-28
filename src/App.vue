@@ -1,13 +1,14 @@
 <template>
-  <div id="app">
-    <users-table @delete="deleteUserFromData" :users="users"></users-table>
+  <div id="app" class="app-container">
+    <!--<user-form @addRow="addNewRow"></user-form>-->
+    <users-table @someNewEvt="qwe" @delete="deleteUserFromData" :users="users"></users-table>
   </div>
 </template>
 
 <script>
   import UsersTable from './components/UsersTable'
+  import UserForm from './components/UserForm'
   import usersData from '@/data.js'
-  //  import hello from './components/Hello.vue'
 
   export default {
     name: 'app',
@@ -17,26 +18,31 @@
       }
     },
     components: {
-      UsersTable
+      UsersTable, UserForm
     },
     methods: {
       deleteUserFromData(id) {
-        console.log(id)
-        this.users = this.users.filter(function (user) {
+        this.users = this.users.filter((user) => {
           return user.id !== id
         })
+      },
+      addNewRow(msg) {
+        console.log(msg)
+      },
+      qwe(msg) {
+        console.log(msg)
       }
     }
   }
 </script>
 
 <style>
-  #app {
+  .app-container {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 60px;
+    padding: 50px 0;
   }
 </style>
