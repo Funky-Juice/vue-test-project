@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="app-container">
-    <!--<user-form @addRow="addNewRow"></user-form>-->
-    <users-table @someNewEvt="qwe" @delete="deleteUserFromData" :users="users"></users-table>
+    <user-form @addNewUser="addNewUser"></user-form>
+    <users-table @delete="deleteUserFromData" :users="users"></users-table>
   </div>
 </template>
 
@@ -26,11 +26,10 @@
           return user.id !== id
         })
       },
-      addNewRow(msg) {
-        console.log(msg)
-      },
-      qwe(msg) {
-        console.log(msg)
+      addNewUser(obj) {
+        this.users.push({...obj})
+//        console.log(this.users)
+//        console.log(this.users[this.users.length - 1].id)
       }
     }
   }

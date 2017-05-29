@@ -1,7 +1,5 @@
 <template>
   <div>
-    <user-form @addRow="addNewRow"></user-form>
-
     <table class="users-table">
       <tbody>
       <tr>
@@ -13,7 +11,8 @@
         <td>{{user.login}}</td>
         <td>{{user['e-mail']}}</td>
         <td>{{user.created}}</td>
-        <button @click="somenewevt; deleteUser(user.id)" class="delete-btn">Удалить</button>
+        {{getUserId(user.id)}}
+        <button @click="deleteUser(user.id)" class="delete-btn">Удалить</button>
       </tr>
       </tbody>
     </table>
@@ -21,8 +20,6 @@
 </template>
 
 <script>
-  import UserForm from './UserForm'
-
   export default {
     name: 'UsersTable',
     props: ['users'],
@@ -31,18 +28,12 @@
         tableHeaders: ['id', 'Имя', 'Логин', 'E-mail', 'Дата регистрации']
       }
     },
-    components: {
-      UserForm
-    },
     methods: {
       deleteUser(id) {
         this.$emit('delete', id)
       },
-      somenewevt() {
-        this.$emit('someNewEvt', 'someNewEvt')
-      },
-      addNewRow(msg) {
-        console.log(msg)
+      getUserId(arg) {
+        return arg
       }
     }
   }

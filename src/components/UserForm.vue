@@ -1,40 +1,70 @@
 <template>
-  <form class="user-form" @submit.prevent="onSubmit">
-    <label class="user-form__item">
-      <span class="user-form__field-name">Имя: </span>
-      <input class="user-form__input" type="text" name="user_name" placeholder="Иванов Иван"
-             pattern="[А-Яа-яЁё\s]{1,10}$" data-error="Укажите имя кириллицей">
-    </label>
+  <div>
+    <form class="user-form" @submit.prevent="addUser">
+      <label class="user-form__item">
+        <span class="user-form__field-name">Имя: </span>
+        <input v-model="newUser.name"
+               class="user-form__input"
+               type="text" name="user_name"
+               placeholder="Иванов Иван"
+               data-error="Укажите имя кириллицей">
+      </label>
 
-    <label class="user-form__item">
-      <span class="user-form__field-name">Логин: </span>
-      <input class="user-form__input" type="text" name="user_login" placeholder="Ivan1988" pattern="^[A-Za-z0-9]{5,20}$"
-             data-error="Не менее 5 символов">
-    </label>
+      <label class="user-form__item">
+        <span class="user-form__field-name">Логин: </span>
+        <input v-model="newUser.login"
+               class="user-form__input"
+               type="text"
+               name="user_login"
+               placeholder="Ivan1988"
+               data-error="Не менее 5 символов">
+      </label>
 
-    <label class="user-form__item">
-      <span class="user-form__field-name">Электронная почта: </span>
-      <input class="user-form__input" type="text" name="user_e-mail" placeholder="example@mail.com"
-             pattern="[A-Za-z0-9]{1,20}\@[A-Za-z]{1,10}\.[A-Za-z]{1,6}" data-error="Перепроверьте почту">
-    </label>
+      <label class="user-form__item">
+        <span class="user-form__field-name">Электронная почта: </span>
+        <input v-model="newUser['e-mail']"
+               class="user-form__input"
+               type="text"
+               name="user_e-mail"
+               placeholder="example@mail.com"
+               data-error="Перепроверьте почту">
+      </label>
 
-    <label class="user-form__item">
-      <span class="user-form__field-name">Дата регистрации: </span>
-      <input class="user-form__input" type="text" name="user_reg-date" placeholder="mm.dd.yyyy"
-             pattern="[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{4}" data-error="Укажите дату регистрации">
-    </label>
+      <label class="user-form__item">
+        <span class="user-form__field-name">Дата регистрации: </span>
+        <input v-model="newUser.created"
+               class="user-form__input"
+               type="date"
+               name="user_reg-date"
+               placeholder="mm.dd.yyyy"
+               data-error="Укажите дату регистрации">
+      </label>
 
-    <input id="form-sbmt" class="user-form__send-btn" type="submit">
-  </form>
+      <input id="form-sbmt" class="user-form__send-btn" type="submit" value="Добавить пользователя">
+    </form>
+  </div>
 </template>
 
 <script>
   export default {
     name: 'UserForm',
+    data() {
+      return {
+        newUser: {
+          name: '',
+          login: '',
+          'e-mail': '',
+          created: ''
+        }
+      }
+    },
     methods: {
-      onSubmit() {
-        console.log('sbmt-btn-click')
-        this.$emit('addRow', 'addrowevt')
+      addUser() {
+        this.$emit('addNewUser', this.newUser)
+        this.newUser.name = ''
+        this.newUser.login = ''
+        this.newUser['e-mail'] = ''
+        this.newUser.created = ''
       }
     }
   }
