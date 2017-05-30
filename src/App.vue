@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="app-container">
-    <user-form @addNewUser="addNewUser"></user-form>
+    <user-form @addNewUser="addNewUser" :lastId="lastId"></user-form>
     <users-table @delete="deleteUserFromData" :users="users"></users-table>
   </div>
 </template>
@@ -20,16 +20,23 @@
     components: {
       UsersTable, UserForm
     },
+    computed: {
+      lastId() {
+        if (this.users.length === 0) {
+          return 0
+        } else {
+          return this.users[this.users.length - 1].id
+        }
+      }
+    },
     methods: {
       deleteUserFromData(id) {
         this.users = this.users.filter((user) => {
           return user.id !== id
         })
       },
-      addNewUser(obj) {
-        this.users.push({...obj})
-//        console.log(this.users)
-//        console.log(this.users[this.users.length - 1].id)
+      addNewUser(user) {
+        this.users.push({...user})
       }
     }
   }

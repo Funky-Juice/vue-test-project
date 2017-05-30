@@ -48,9 +48,11 @@
 <script>
   export default {
     name: 'UserForm',
+    props: ['lastId'],
     data() {
       return {
         newUser: {
+          id: '',
           name: '',
           login: '',
           'e-mail': '',
@@ -60,6 +62,7 @@
     },
     methods: {
       addUser() {
+        this.newUser.id = this.lastId + 1
         this.$emit('addNewUser', this.newUser)
         this.newUser.name = ''
         this.newUser.login = ''
