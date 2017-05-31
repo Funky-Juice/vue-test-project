@@ -6,8 +6,9 @@
         <input v-model="newUser.name"
                class="user-form__input"
                type="text" name="user_name"
-               placeholder="Иванов Иван"
-               data-error="Укажите имя кириллицей">
+               placeholder="Иванов Иван">
+        <span class="error-msg"
+              v-show="!validation.name">Укажите имя кириллицей</span>
       </label>
 
       <label class="user-form__item">
@@ -16,8 +17,9 @@
                class="user-form__input"
                type="text"
                name="user_login"
-               placeholder="Ivan1988"
-               data-error="Не менее 5 символов">
+               placeholder="Ivan1988">
+        <span class="error-msg"
+              v-show="!validation.login">Не менее 5 латинских символов</span>
       </label>
 
       <label class="user-form__item">
@@ -26,8 +28,9 @@
                class="user-form__input"
                type="text"
                name="user_e-mail"
-               placeholder="example@mail.com"
-               data-error="Перепроверьте почту">
+               placeholder="example@mail.com">
+        <span class="error-msg"
+              v-show="!validation['e-mail']">Укажите почту</span>
       </label>
 
       <label class="user-form__item">
@@ -36,8 +39,9 @@
                class="user-form__input"
                type="date"
                name="user_reg-date"
-               placeholder="mm.dd.yyyy"
-               data-error="Укажите дату регистрации">
+               placeholder="mm.dd.yyyy">
+        <span class="error-msg"
+              v-show="!validation.created">Укажите дату регистрации</span>
       </label>
 
       <input id="form-sbmt" class="user-form__send-btn" type="submit" value="Добавить пользователя">
@@ -46,6 +50,9 @@
 </template>
 
 <script>
+  var nameRE = /[А-Яа-яЁё\s]{3,10}$/
+  var loginRE = /^[A-Za-z0-9]{5,20}$/
+  var emailRE = /[A-Za-z0-9]{1,20}@[A-Za-z]{1,10}.[A-Za-z]{2,6}/
   export default {
     name: 'UserForm',
     props: ['lastId'],
@@ -60,14 +67,32 @@
         }
       }
     },
+    computed: {
+      validation() {
+        return {
+          name: nameRE.test(this.newUser.name),
+          login: loginRE.test(this.newUser.login),
+          'e-mail': emailRE.test(this.newUser['e-mail']),
+          created: !!this.newUser.created
+        }
+      },
+      isValid() {
+        var validation = this.validation
+        return Object.keys(validation).every(function (key) {
+          return validation[key]
+        })
+      }
+    },
     methods: {
       addUser() {
-        this.newUser.id = this.lastId + 1
-        this.$emit('addNewUser', this.newUser)
-        this.newUser.name = ''
-        this.newUser.login = ''
-        this.newUser['e-mail'] = ''
-        this.newUser.created = ''
+        if (this.isValid) {
+          this.newUser.id = this.lastId + 1
+          this.$emit('addNewUser', this.newUser)
+          this.newUser.name = ''
+          this.newUser.login = ''
+          this.newUser['e-mail'] = ''
+          this.newUser.created = ''
+        }
       }
     }
   }
@@ -85,7 +110,7 @@
   .user-form__item {
     display: block;
     width: 200px;
-    margin: 0 auto 10px;
+    margin: 0 auto 15px;
     padding: 5px;
   }
 
@@ -97,6 +122,8 @@
 
   .user-form__input {
     display: block;
+    width: 100%;
+    box-sizing: border-box;
     padding: 10px;
     border: 1px solid grey;
   }
@@ -106,15 +133,11 @@
     padding: 5px;
   }
 
-  .user-form .error {
-    border: 1px solid red;
-  }
-
-  .user-form .error-text {
+  .user-form .error-msg {
     position: absolute;
     display: block;
     text-transform: none;
     color: red;
-    font-size: 15px;
+    font-size: 14px;
   }
 </style>

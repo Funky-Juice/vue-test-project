@@ -7,7 +7,7 @@
       </tr>
       <tr v-for="user in users" :key="user.id"
           class=""
-          :class="{editing: user == editedTodo}">
+          :class="{editing: user == fieldValue}">
         <td>{{user.id}}</td>
         <td>{{user.name}}</td>
         <td @dblclick="editField(user)">
@@ -15,13 +15,13 @@
           <input class="editInput"
                  type="text"
                  v-model.trim="user.login"
-                 v-todo-focus="user == editedTodo"
+                 v-edit-focus="user == fieldValue"
                  @blur="doneEdit"
                  @keyup.enter="doneEdit"
                  @keyup.esc="cancelEdit(user)">
         </td>
         <td>{{user['e-mail']}}</td>
-        <td>{{user.created}}</td>
+        <td>{{formatDate(user.created)}}</td>
         <button @click="deleteUser(user.id)" class="delete-btn">Удалить</button>
       </tr>
       </tbody>
@@ -35,7 +35,7 @@
     props: ['users'],
     data() {
       return {
-        editedTodo: null,
+        fieldValue: null,
         tableHeaders: ['id', 'Имя', 'Логин', 'E-mail', 'Дата регистрации']
       }
     },
@@ -45,22 +45,39 @@
       },
       editField(user) {
         this.beforeEditCache = user.login
-        this.editedTodo = user
+        this.fieldValue = user
       },
       doneEdit() {
-        if (!this.editedTodo) {
+        if (!this.fieldValue) {
           return
         }
-        this.editedTodo = null
+        this.fieldValue = null
       },
       cancelEdit(user) {
-        this.editedTodo = null
+        this.fieldValue = null
         user.login = this.beforeEditCache
+      },
+      formatDate(data) {
+        var msUTC = Date.parse(data)
+
+        if (isNaN(msUTC)) {
+          var date = new Date()
+        } else {
+          date = new Date(msUTC)
+        }
+
+        function getMonthName(date) {
+          var months = ['янв.', 'фев.', 'март', 'апр.', 'май', 'июнь', 'июль', 'авг.', 'сент.', 'окт.', 'нояб.', 'дек.']
+          return months[date.getMonth()]
+        }
+
+        var newData = date.toLocaleString('ru', {weekday: 'short'}) + ', ' + date.getDate() + ' ' + getMonthName(date) + ' ' + date.getFullYear() + 'г.'
+        return (newData)
       }
     },
     // ставит фокус на поле ввода при его активировании
     directives: {
-      'todo-focus': function (el, binding) {
+      'edit-focus': function (el, binding) {
         if (binding.value) {
           el.focus()
         }
@@ -93,7 +110,6 @@
 
   .editInput {
     display: none;
-    width: 100%;
     margin: 0;
     padding: 0;
     font-size: inherit;
