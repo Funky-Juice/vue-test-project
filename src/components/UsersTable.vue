@@ -6,7 +6,6 @@
         <th v-for="header in tableHeaders">{{header}}</th>
       </tr>
       <tr v-for="user in users" :key="user.id"
-          class=""
           :class="{editing: user == fieldValue}">
         <td>{{user.id}}</td>
         <td>{{user.name}}</td>
@@ -32,16 +31,20 @@
 <script>
   export default {
     name: 'UsersTable',
-    props: ['users'],
     data() {
       return {
         fieldValue: null,
         tableHeaders: ['id', 'Имя', 'Логин', 'E-mail', 'Дата регистрации']
       }
     },
+    computed: {
+      users() {
+        return this.$store.state.users
+      }
+    },
     methods: {
       deleteUser(id) {
-        this.$emit('delete', id)
+        this.$store.commit('deleteUser', id)
       },
       editField(user) {
         this.beforeEditCache = user.login

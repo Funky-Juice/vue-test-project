@@ -55,7 +55,6 @@
   var emailRE = /[A-Za-z0-9]{1,20}@[A-Za-z]{1,10}.[A-Za-z]{2,6}/
   export default {
     name: 'UserForm',
-    props: ['lastId'],
     data() {
       return {
         newUser: {
@@ -86,8 +85,8 @@
     methods: {
       addUser() {
         if (this.isValid) {
-          this.newUser.id = this.lastId + 1
-          this.$emit('addNewUser', this.newUser)
+          this.newUser.id = this.$store.getters.lastId + 1
+          this.$store.commit('addNewUser', this.newUser)
           this.newUser.name = ''
           this.newUser.login = ''
           this.newUser['e-mail'] = ''
