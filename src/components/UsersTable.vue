@@ -6,7 +6,7 @@
         <th v-for="header in tableHeaders">{{header}}</th>
       </tr>
       <tr v-for="user in users" :key="user.id"
-          :class="{editing: user == fieldValue}">
+          :class="{editing: user === fieldValue}">
         <td>{{user.id}}</td>
         <td>{{user.name}}</td>
         <td @dblclick="editField(user)">
@@ -14,7 +14,7 @@
           <input class="editInput"
                  type="text"
                  v-model.trim="user.login"
-                 v-edit-focus="user == fieldValue"
+                 v-edit-focus="user === fieldValue"
                  @blur="doneEdit"
                  @keyup.enter="doneEdit"
                  @keyup.esc="cancelEdit(user)">
@@ -54,6 +54,7 @@
         if (!this.fieldValue) {
           return
         }
+        this.$store.commit('updateUser', {id: this.fieldValue.id, login: this.fieldValue.login})
         this.fieldValue = null
       },
       cancelEdit(user) {

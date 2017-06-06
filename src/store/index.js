@@ -25,6 +25,14 @@ const store = new Vuex.Store({
     },
     addNewUser(state, newUser) {
       state.users.push({...newUser})
+    },
+    updateUser(state, {id, login}) {
+      state.users = state.users.map((user) => {
+        if (user.id === id) {
+          user.login = login
+        }
+        return user
+      })
     }
   }
 })
