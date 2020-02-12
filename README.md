@@ -2,6 +2,10 @@
 
 > test-task-1
 
+# Node ver
+
+~7.4.0
+
 ## Build Setup
 
 ``` bash
