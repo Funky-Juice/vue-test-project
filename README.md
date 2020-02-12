@@ -4,7 +4,7 @@
 
 # Node ver
 
-~7.4.0
+12.14.0
 
 ## Build Setup
 
